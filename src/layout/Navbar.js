@@ -19,13 +19,23 @@ import {
     ChevronDownIcon,
     ChevronRightIcon,
 } from '@chakra-ui/icons';
-
+import { logoutUser } from '../actions/auth';
 import { Link as lee } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import CartPreview from '../components/cart/CartPreview';
+import { useDispatch } from 'react-redux'
+
+
+
+
 export default function Navbar() {
     const { isOpen, onToggle } = useDisclosure();
     const { token } = useSelector(state => state.auth)
+    const dispatch = useDispatch()
+    const handleLogout = () => {
+        dispatch(logoutUser())
+        window.location.reload(false);
+    }
     return (
         <Box>
             <Flex
@@ -63,12 +73,13 @@ export default function Navbar() {
 
                 <Button
                     as={lee}
-                    display={{ base: 'none', md: 'inline-flex' }}
+                   
                     fontSize={'sm'}
                     fontWeight={600}
                     color={'white'}
                     bg={'red.400'}
                     to={'/'}
+                    onClick={handleLogout}
                     _hover={{
                         bg: 'red.300',
                     }}>
