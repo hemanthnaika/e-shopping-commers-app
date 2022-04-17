@@ -1,4 +1,3 @@
-
 import {
     Container,
     SimpleGrid,
@@ -12,7 +11,6 @@ import {
     useColorModeValue,
     Button,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import {
     IoAnalyticsSharp,
     IoColorFilterOutline,
@@ -20,10 +18,17 @@ import {
     IoScanOutline,
     IoSearchSharp,
     IoShieldCheckmarkOutline,
+    IoCartOutline
 } from 'react-icons/io5';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+// import { ReactElement } from 'react';
 import Values from '../Values';
+import Details from './Details';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+// import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { addToCart } from '../../actions/cart';
+import { useDispatch } from 'react-redux';
 
 
 const Feature = ({ text, icon, iconBg }) => {
@@ -44,19 +49,36 @@ const Feature = ({ text, icon, iconBg }) => {
 };
 
 export default function Product() {
-    const [selectedProduct, setSelectedproduct] = useState(null)
-    const { products } = useSelector(state => state.products)
-    const { productId } = useParams()
 
-    const fetchProduct = (productId) => {
-        const product = products.find(product => product.id == productId)
-        setSelectedproduct(product)
+ const [products, setproducts] = useState([])
+    const [category, setcategory] = useState([])
+    const [compatibleWith, setcompatibleWith] = useState([])
+    const { productId } = useParams()
+    const dispatch = useDispatch()
+    const getProducts = async () => {
+        const res = await axios.get('https://hemanth-e-comerce-api.herokuapp.com/api/v1/product/all')
+        
+        const { products } = res.data
+      
+        const fproduct = products.find(product => product._id == productId)
+       
+        const { category, compatibleWith } = fproduct
+        setcategory(category)
+        setcompatibleWith(compatibleWith)
+        setproducts(fproduct)
     }
+
     useEffect(() => {
-        fetchProduct(productId)
+        getProducts()
     }, [])
 
-    console.log(selectedProduct)
+  
+
+    const addCart = (item) => {
+        
+        dispatch(addToCart(item))
+    }
+
     return (
         <Container maxW={'7xl'} py={12}>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
@@ -64,9 +86,7 @@ export default function Product() {
                     <Image
                         rounded={'md'}
                         alt={'feature image'}
-                        src={
-                            selectedProduct && selectedProduct.imageUrl
-                        }
+                        src={products && products.imageUrl}
                         objectFit={'cover'}
                     />
                 </Flex>
@@ -80,11 +100,11 @@ export default function Product() {
                         p={2}
                         alignSelf={'flex-start'}
                         rounded={'md'}>
-                        {selectedProduct && selectedProduct.category}
+                        {products && category.description}
                     </Text>
-                    <Heading>{selectedProduct && selectedProduct.name}</Heading>
+                    <Heading>{products && products.productName}</Heading>
                     <Text color={'gray.500'} fontSize={'lg'}>
-                        {selectedProduct && selectedProduct.description}
+                        {products && products.description}
                     </Text>
                     <Stack
                         spacing={4}
@@ -99,7 +119,7 @@ export default function Product() {
                                 <Icon as={IoScanOutline} color={'yellow.500'} w={5} h={5} />
                             }
                             iconBg={useColorModeValue('yellow.100', 'yellow.900')}
-                            text={`For : ${selectedProduct && selectedProduct.compatibleWith}`}
+                            text={`For : ${products && compatibleWith}`}
                         />
 
                         <Feature
@@ -107,7 +127,7 @@ export default function Product() {
                                 <Icon as={IoColorFilterOutline} color={'purple.500'} w={5} h={5} />
                             }
                             iconBg={useColorModeValue('purple.100', 'purple.900')}
-                            text={`Color : ${selectedProduct && selectedProduct.color}`}
+                            text={`Color : ${products && products.color}`}
                         />
                         <Feature
                             icon={<Icon as={IoShieldCheckmarkOutline} color={'green.500'} w={5} h={5} />}
@@ -117,6 +137,9 @@ export default function Product() {
                     </Stack>
                     <Flex justifyContent={'space-between'} spacing={10} pt={2}>
                         <Button
+                            onClick={() => {
+                                addCart(products)
+                            }}
                             flexGrow={'4'}
                             loadingText="Submitting"
                             size="lg"
@@ -125,15 +148,15 @@ export default function Product() {
                             _hover={{
                                 bg: 'blue.400',
                             }}>
-                            Buy Now
+                            Add To Cart &nbsp; &nbsp; <IoCartOutline size={30} />
                         </Button>
-                        <Heading color={'gray.900'} textAlign={'center'} borderRadius={'10px'} flexGrow={'2'} background={'gray.100'}>{selectedProduct && selectedProduct.listingPrice}</Heading>
+                        <Heading color={'gray.900'} textAlign={'center'} borderRadius={'10px'} flexGrow={'2'} background={'gray.100'}>$ {products && products.listPrice}</Heading>
                     </Flex>
                 </Stack>
 
             </SimpleGrid>
             <Values />
-            {/* <Details /> */}
-        </Container >
+            <Details />
+        </Container>
     );
 }

@@ -66,3 +66,30 @@ export const signupUser = (email, firstName, lastName, password) => async (dispa
         toast.error(error.message)
     }
 };
+
+export const logoutUser = () => async (dispatch) => {
+
+    try {
+        // const token = localStorage.getItem(token)
+        // if (token) {
+        toast.success("Logout Success !")
+
+        //remove token from the local storage
+        localStorage.setItem("token", null)
+
+        dispatch({
+            type: "LOGOUT_SUCCESS",
+            // payload: { token:null }
+        })
+        // } else {
+        //     toast.error(message)
+        //     dispatch({
+        //         type: "LOGOUT_FAILED",
+        //         payload: { token: null }
+        //     })
+        // }
+    } catch (error) {
+        console.log(error.message)
+        toast.error(error.message)
+    }
+};
