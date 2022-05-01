@@ -1,25 +1,11 @@
-// export const deleteProduct = (productId) => {
-//     return {
-//         type: "DELETE_PRODUCT",
-//         payload: { productId }
-//     }
-// }
 
-// export const addProduct = (product) => {
-//     return {
-//         type: "ADD_PRODUCT",
-//         payload: { product }
-//     }
-// }
-
-// import jwt from 'jsonwebtoken'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 
 export const addProduct = (name,imageUrl,description,category,color,price, listPrice,stock) => async (dispatch) => {
 
     try {
-        const base_Url = 'http://localhost:3003'
+        const base_Url = 'https://hemanth-e-commerce-backend-api.herokuapp.com'
         const res = await axios.post(`${base_Url}/api/v1/product/add`, {
             name,imageUrl,description,category,color,price, listPrice,stock
         })
@@ -47,7 +33,7 @@ export const addProduct = (name,imageUrl,description,category,color,price, listP
 export const deleteProduct = (id) => async (dispatch) => {
 
     try {
-        const base_Url = 'http://localhost:3003'
+        const base_Url = 'https://hemanth-e-commerce-backend-api.herokuapp.com'
         const res = await axios.delete(`${base_Url}/api/v1/product/delete/${id}`)
         console.log(res.data)
         const { product, message } = res.data
@@ -70,7 +56,7 @@ export const deleteProduct = (id) => async (dispatch) => {
 };
 
 export const getProducts = (name, description) => async (dispatch) => {
-    const res = await axios.get('http://localhost:3003/api/v1/product/all')
+    const res = await axios.get('https://hemanth-e-commerce-backend-api.herokuapp.com/api/v1/product/all')
     const { products } = res.data
     dispatch({
         type: "GET_PRODUCTS",

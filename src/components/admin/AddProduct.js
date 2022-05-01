@@ -32,7 +32,7 @@ const AddProduct = () => {
     const dispatch = useDispatch()
 
     const getCategories = async () => {
-        const res = await axios.get('http://localhost:3003/api/v1/category/all')
+        const res = await axios.get('https://hemanth-e-commerce-backend-api.herokuapp.com/api/v1/category/all')
         const { categories, message } = res.data
         setCategories(categories)
     }

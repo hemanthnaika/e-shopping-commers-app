@@ -8,7 +8,7 @@ import jwtDecode from 'jwt-decode';
 export const loginUser = (email, password) => async (dispatch) => {
 
     try {
-        const base_Url = 'http://localhost:3003'
+        const base_Url = 'https://hemanth-e-commerce-backend-api.herokuapp.com'
 
         const res = await axios.post(`${base_Url}/api/v1/auth/login`, {
             email, password
@@ -58,7 +58,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const signupUser = (email, firstName, lastName, password) => async (dispatch) => {
 
     try {
-        const base_Url = 'http://localhost:3003'
+        const base_Url = 'https://hemanth-e-commerce-backend-api.herokuapp.com'
 
         const res = await axios.post(`${base_Url}/api/v1/auth/signup`, {
             email, firstName, lastName, password
