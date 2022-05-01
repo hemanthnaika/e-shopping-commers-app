@@ -28,13 +28,16 @@ import { useDispatch } from 'react-redux'
 
 
 
+
 export default function Navbar() {
     const { isOpen, onToggle } = useDisclosure();
     const { token } = useSelector(state => state.auth)
+    const { role } = useSelector(state => state.admin)
+    console.log({token})
     const dispatch = useDispatch()
     const handleLogout = () => {
         dispatch(logoutUser())
-        window.location.reload(false);
+       
     }
     return (
         <Box>
@@ -66,7 +69,12 @@ export default function Navbar() {
                         <DesktopNav />
                     </Flex>
                 </Flex>
-
+{role ?<Button 
+  as={lee}
+  to={'admin'}
+>Admin</Button> :null
+       
+}
                 {token ? 
                 <>
 <CartPreview/>
@@ -224,10 +232,5 @@ const NAV_ITEMS = [
         to: '/shop?q=watch'
 
     },
-    {
-        label: 'Admin',
-        to: '/admin'
-
-    },
-
+   
 ];

@@ -2,13 +2,13 @@
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
-
+import jwtDecode from 'jwt-decode';
 
 
 export const loginUser = (email, password) => async (dispatch) => {
 
     try {
-        const base_Url = 'https://hemanth-e-commerce-backend-api.herokuapp.com'
+        const base_Url = 'http://localhost:3003'
 
         const res = await axios.post(`${base_Url}/api/v1/auth/login`, {
             email, password
@@ -19,6 +19,24 @@ export const loginUser = (email, password) => async (dispatch) => {
             toast.success('Login Success')
             // save token to the local storage
             localStorage.setItem('token', token)
+            const decoded=jwtDecode(token)
+            const { role } = decoded
+        
+            if (role === 1) 
+            {
+               localStorage.setItem("role",role)
+               dispatch({
+                   type:"Admin_Token",
+                   payload:{role}
+               })
+            }
+           else{
+            dispatch({
+                type: "AdminToken_FAILED",
+                payload: { role: null }
+            }) 
+           } 
+
             dispatch({
                 type: "LOGIN_SUCCESS",
                 payload: { token }
@@ -40,7 +58,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const signupUser = (email, firstName, lastName, password) => async (dispatch) => {
 
     try {
-        const base_Url = 'https://hemanth-e-commerce-backend-api.herokuapp.com'
+        const base_Url = 'http://localhost:3003'
 
         const res = await axios.post(`${base_Url}/api/v1/auth/signup`, {
             email, firstName, lastName, password
@@ -70,25 +88,21 @@ export const signupUser = (email, firstName, lastName, password) => async (dispa
 export const logoutUser = () => async (dispatch) => {
 
     try {
-        // const token = localStorage.getItem(token)
-        // if (token) {
         toast.success("Logout Success !")
 
         //remove token from the local storage
         localStorage.clear();
+       
         dispatch({
             type: "LOGOUT_SUCCESS",
-            // payload: { token:null }
+           
         })
-        // } else {
-        //     toast.error(message)
-        //     dispatch({
-        //         type: "LOGOUT_FAILED",
-        //         payload: { token: null }
-        //     })
-        // }
+        window.location.reload(false);
     } catch (error) {
         console.log(error.message)
         toast.error(error.message)
     }
 };
+
+
+

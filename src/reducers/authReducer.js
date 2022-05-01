@@ -31,6 +31,7 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 signup: false
             }
+         
         case "LOGOUT":
             return {
                 token: null

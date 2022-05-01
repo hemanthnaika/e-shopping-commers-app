@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import {getProducts} from './actions/product'
 import { loadCart } from './actions/cart';
 import Cart from './components/cart/Cart';
+import AdminCheck from './routing/AdminToken';
 
 function App() {
 
@@ -35,15 +36,28 @@ function App() {
 
   }, [])
 
+  
   useEffect(() => {
-    console.log('lorem')
+    const role = localStorage.getItem('role')
+
+    if (role) {
+    
+      dispatch({
+        type: "SET_Admin_TOKEN",
+        payload: {role}
+      })
+    }
+
+  }, [])
+
+  useEffect(() => {
     dispatch(getProducts())
     dispatch(loadCart())
   }, [])
   return (
     <div className="App">
+   
       <Navbar />
-      {/* <Home /> */}
       <Toaster />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -51,12 +65,12 @@ function App() {
         <Route path='/shop/:productId' element={<Product />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
-        <Route path='/admin' element={<Admin />} />
+        <Route path='/admin' element={<AdminCheck />} />
         <Route path='/cart' element={<Cart />} />
       </Routes>
   
       <Footer />
-
+ 
     </div>
   );
 }

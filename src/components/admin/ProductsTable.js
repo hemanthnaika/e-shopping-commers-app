@@ -29,7 +29,7 @@ const ProductsTable = () => {
     const [products, setproducts] = useState([])
 
     const getProducts = async () => {
-        const res = await axios.get('https://hemanth-e-commerce-backend-api.herokuapp.com/api/v1/product/all')
+        const res = await axios.get('http://localhost:3003/api/v1/product/all')
         // console.log(res.data)
         const { products, message } = res.data
         // console.log(products)

@@ -24,12 +24,9 @@ export default function Login() {
     const dispatch = useDispatch()
 
     const { token } = useSelector(state => state.auth)
-
-
-    const handleLogin = () => {
-        dispatch(loginUser(email, password))
+      const handleLogin = () => {
+        dispatch(loginUser(email, password)) 
     }
-
     return token ? <Navigate to='/' /> : <Flex
         minH={'100vh'}
         align={'center'}
@@ -66,6 +63,7 @@ export default function Login() {
                         </Stack>
                         <Button
                             onClick={handleLogin}
+                           
                             bg={'blue.400'}
                             color={'white'}
                             _hover={{
