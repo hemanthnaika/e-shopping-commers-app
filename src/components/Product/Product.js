@@ -56,7 +56,7 @@ export default function Product() {
     const { productId } = useParams()
     const dispatch = useDispatch()
     const getProducts = async () => {
-        const res = await axios.get('https://hemanth-e-comerce-api.herokuapp.com/api/v1/product/all')
+        const res = await axios.get('https://shopping-backend-api-gsve.onrender.com/api/v1/product/all')
         
         const { products } = res.data
       
